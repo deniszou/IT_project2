@@ -22,23 +22,23 @@ def connectTs(host):
 
 
 def client():
-    rsHost = sys.argv[1]
+    lsHost = sys.argv[1]
     try:
-        rcs = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        cs = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print("[C]: Client socket created")
     except socket.error as err:
         print('socket open error: {} \n'.format(err))
         # exit()
     # Define the port on which you want to connect to the server
-    rsListenPort = int(sys.argv[2])
-    port = rsListenPort
-    localhost_addr = socket.gethostbyname(rsHost)
+    lsListenPort = int(sys.argv[2])
+    port = lsListenPort
+    localhost_addr = socket.gethostbyname(lsHost)
 
     # connect to the server on local machine
     server_binding = (localhost_addr, port)
-    rcs.connect(server_binding)
+    cs.connect(server_binding)
 
-    with open("PROJI-HNS.txt") as f:
+    with open("PROJ2-HNS.txt") as f:
         lines = f.readlines()
 
     #print(lines)
@@ -53,15 +53,16 @@ def client():
         line = line.lower()
 
         # send to RS
-        rcs.send(line.strip("\n").encode('utf-8'))
+        cs.send(line.strip("\n").encode('utf-8'))
 
-        data_from_server = rcs.recv(1024)
+        data_from_server = cs.recv(1024)
         d = data_from_server.decode('utf-8')
         #print('works', d)
-        if d.endswith("A") or d.endswith("A\n"):
-            time.sleep(1.5)
-            print("[C]: Data matched in RS table and received from server:", d)
-            f.write(d)
+        #if d.endswith("A") or d.endswith("A\n"):
+        time.sleep(1.5)
+        print("[C]: Data matched in RS table and received from server:", d)
+        f.write(d)
+        """
         elif d.endswith("NS") or d.endswith("NS\n"):
             time.sleep(1.5)
             print("[C]: No match found in RS table, data ends with NS")
@@ -82,12 +83,12 @@ def client():
             else:
                 print("[C]: Hostname - error: HOST NOT FOUND")
                 f.write(m)
-
-    rcs.send("end".encode('utf-8'))
-    if connectTS != 0:
-        connectTS.send("end".encode('utf-8'))
+    """
+    cs.send("end".encode('utf-8'))
+    # if connectTS != 0:
+    #     connectTS.send("end".encode('utf-8'))
     f.close()
-    rcs.close()
+    cs.close()
     exit()
 
 
