@@ -41,7 +41,7 @@ def client():
     with open("PROJ2-HNS.txt") as f:
         lines = f.readlines()
 
-    #print(lines)
+    print(lines)
 
     f = open("RESOLVED.txt", "w+")
 
@@ -57,7 +57,7 @@ def client():
 
         data_from_server = cs.recv(1024)
         d = data_from_server.decode('utf-8')
-        #print('works', d)
+        print('works', d)
         #if d.endswith("A") or d.endswith("A\n"):
         time.sleep(1.5)
         print("[C]: Data matched in RS table and received from server:", d)

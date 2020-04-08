@@ -10,14 +10,8 @@ def readFile():
 
     for ln in fh:
         rec = ln.split(' ')
-        dict1[rec[0]] = (rec[1], rec[2])
+        dict1[rec[0]] = (rec[0] + " " + rec[1] + " " + rec[2])
     fh.close()
-
-
-def checkKey(k, dict1):
-    for key in dict1:
-        if key == k:
-                return (key, dict1[key][0], dict1[key][1])
 
 
 def server():
@@ -50,12 +44,9 @@ def server():
             ss.close()
             exit()
 
-        for key in dict1:
-            if key == k:
-                msg = key + " " + result[1] + " A"
-                #return (key, dict1[key][0], dict1[key][1])
-
-        csockid.send(msg.encode('utf-8'))
+        if dict1.get(hostname, "dne") != "dne":
+            msg = dict1.get(hostname, "dne")
+            csockid.send(msg.encode('utf-8'))
 
 
 dict1 = {}

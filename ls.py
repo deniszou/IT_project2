@@ -4,23 +4,6 @@ import time
 import sys
 
 
-def connectTs(host):
-    try:
-        tcs = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("[C]: Connect to TS")
-    except socket.error as err:
-        print('socket open error: {} \n'.format(err))
-    tsListenPort = int(sys.argv[3])
-    port = tsListenPort
-    localhost_addr = socket.gethostbyname(host)
-
-    # connect to the server on local machine
-    server_binding = (localhost_addr, port)
-    #print(localhost_addr)
-    tcs.connect(server_binding)
-    return tcs
-
-
 def ls():
     #create server socket to communicate with cs
     try:
@@ -71,7 +54,9 @@ def ls():
         ts1.send(hn)
         ts2.send(hn)
         data_from_ts1 = ts1.recv(1024)
+        ts1.settimeout(10)
         data_from_ts2 = ts2.recv(1024)
+        ts2.settimeout(10)
         dts1 = data_from_ts1.decode('utf-8')
         dts2 = data_from_ts2.decode('utf-8')
         msg = ''
@@ -88,7 +73,7 @@ def ls():
 
 
 
-t2 = threading.Thread(name='client', target=client)
+t2 = threading.Thread(name='lsServer', target=ls)
 t2.start()
 
 time.sleep(5)
