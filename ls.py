@@ -51,11 +51,14 @@ def ls():
 
     while 1:
         hn = csockid.recv(1024)
+        print(hn.decode('utf-8'))
         ts1.send(hn)
         ts2.send(hn)
         data_from_ts1 = ts1.recv(1024)
+        print(data_from_ts1)
         ts1.settimeout(10)
         data_from_ts2 = ts2.recv(1024)
+        print(data_from_ts2)
         ts2.settimeout(10)
         dts1 = data_from_ts1.decode('utf-8')
         dts2 = data_from_ts2.decode('utf-8')

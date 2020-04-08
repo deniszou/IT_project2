@@ -42,7 +42,7 @@ def server():
     while 1:
         hn = csockid.recv(1024)
         hostname = hn.decode('utf-8')
-        #print(hostname)
+        print(hostname)
         readFile()
 
         # Close the server socket
@@ -52,7 +52,10 @@ def server():
 
         if dict1.get(hostname, "dne") != "dne":
             msg = dict1.get(hostname, "dne")
+            print("found")
             csockid.send(msg.encode('utf-8'))
+        else:
+            print("dne")
 
 
 
