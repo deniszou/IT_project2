@@ -6,22 +6,18 @@ import sys
 
 
 def readFile():
-    fh = open("PROJI-DNSTS.txt")
+    fh = open("PROJ2-DNSTS2.txt")
 
     for ln in fh:
         rec = ln.split(' ')
-        dict1[rec[0]] = (rec[0] + " " + rec[1] + " " + rec[2])
+        dict1[rec[0]] = (rec[1], rec[2])
     fh.close()
 
 
 def checkKey(k, dict1):
     for key in dict1:
-        print(key)
-        if k == key:
-            print(dict1[key][0])
-            return (dict1[key])
-    print("Did not work")
-    return (0, 0)
+        if key == k:
+                return (key, dict1[key][0], dict1[key][1])
 
 
 def server():
@@ -32,7 +28,7 @@ def server():
         print('socket open error: {}\n'.format(err))
         exit()
 
-    # server_binding = ('', 50008)
+    #server_binding = ('', 50008)
     server_binding = ('', int(sys.argv[1]))
     ss.bind(server_binding)
     ss.listen(1)
@@ -41,7 +37,7 @@ def server():
     localhost_ip = (socket.gethostbyname(host))
     print("[S]: Server IP address is {}".format(localhost_ip))
     csockid, addr = ss.accept()
-    print("[S]: Got a connection request from a client at {}".format(addr))
+    print("[S]: Got a connection request from ls at {}".format(addr))
 
     while 1:
         hn = csockid.recv(1024)
@@ -54,16 +50,14 @@ def server():
             ss.close()
             exit()
 
-        if dict1.get(hostname, "dne") == "dne":
-            msg = hostname + " - Error:HOST NOT FOUND\n"
-        else:
-            msg = dict1.get(hostname, "dne")
+        for key in dict1:
+            if key == k:
+                msg = key + " " + result[1] + " A"
+                #return (key, dict1[key][0], dict1[key][1])
 
-        # msg = checkKey(hostname, dict1)
         csockid.send(msg.encode('utf-8'))
 
 
 dict1 = {}
-t1 = threading.Thread(name='tsServer', target=server)
-t1.start()
-
+t2 = threading.Thread(name='tsServer', target=server)
+t2.start()

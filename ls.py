@@ -76,11 +76,16 @@ def ls():
         dts2 = data_from_ts2.decode('utf-8')
         msg = ''
 
+
         #replace this code with timeout
-        if dts1 == "nf" and dts2 == "nf":
-            msg = "Hostname - Error:HOST NOT FOUND"
-            csockid.send(msg.encode('utf-8'))
-        # print(hostname)
+        # if dts1 == "nf" and dts2 == "nf":
+        #     msg = "Hostname - Error:HOST NOT FOUND"
+        #     csockid.send(msg.encode('utf-8'))
+        # # print(hostname)
+        csockid.send(dts1.encode('utf-8'))
+        csockid.send(dts2.encode('utf-8'))
+
+
 
 
 t2 = threading.Thread(name='client', target=client)
