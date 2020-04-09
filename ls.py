@@ -50,6 +50,7 @@ def ls():
     ts2.connect(ts2_binding)
     ts1.settimeout(5)
     ts2.settimeout(5)
+    csockid.settimeout(10)
     while 1:
         time1 = False
         time2 = False
@@ -61,7 +62,7 @@ def ls():
         try:
             data_from_ts1 = ts1.recv(1024)
         except socket.timeout as timeout:
-            ts1.send("timeout".encode('utf-8'))
+            #ts1.send("timeout".encode('utf-8'))
             print("timeout1", timeout)
             data_from_ts1 = "timeout".encode('utf-8')
             time1 = True
@@ -75,7 +76,7 @@ def ls():
         try:
             data_from_ts2 = ts2.recv(1024)
         except socket.timeout as timeout:
-            ts2.send("timeout".encode('utf-8'))
+            #ts2.send("timeout".encode('utf-8'))
             print("timeout2", timeout)
             data_from_ts2 = "timeout".encode('utf-8')
             time2 = True

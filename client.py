@@ -4,22 +4,6 @@ import time
 import sys
 
 
-def connectTs(host):
-    try:
-        tcs = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("[C]: Connect to TS")
-    except socket.error as err:
-        print('socket open error: {} \n'.format(err))
-    tsListenPort = int(sys.argv[3])
-    port = tsListenPort
-    localhost_addr = socket.gethostbyname(host)
-
-    # connect to the server on local machine
-    server_binding = (localhost_addr, port)
-    #print(localhost_addr)
-    tcs.connect(server_binding)
-    return tcs
-
 
 def client():
     lsHost = sys.argv[1]
@@ -47,7 +31,6 @@ def client():
 
     time.sleep(1.5)
 
-    connectTS = 0
 
     for line in lines:
         line = line.lower()
@@ -67,34 +50,11 @@ def client():
         else:
             print("[C]: Data matched in RS table and received from server:", d)
             f.write(d)
-        """
-        elif d.endswith("NS") or d.endswith("NS\n"):
-            time.sleep(1.5)
-            print("[C]: No match found in RS table, data ends with NS")
-            host = d.split(' ')
-            # send to TS
-            if connectTS == 0:
-                #print(host[0])
-                connectTS = connectTs(host[0])
-
-            connectTS.send(line.strip("\n").encode('utf-8'))
-            time.sleep(1.5)
-
-            data_from_ts_server = connectTS.recv(1024)
-            m = data_from_ts_server.decode('utf-8')
-            if m.endswith("A") or m.endswith("A\n"):
-                print("[C]: Data matched in TS table and received from server")
-                f.write(m)
-            else:
-                print("[C]: Hostname - error: HOST NOT FOUND")
-                f.write(m)
-    """
     #cs.send("end".encode('utf-8'))
-    # if connectTS != 0:
-    #     connectTS.send("end".encode('utf-8'))
+
     f.close()
-    cs.close()
-    exit()
+    #cs.close()
+    #exit()
 
 
 t2 = threading.Thread(name='client', target=client)

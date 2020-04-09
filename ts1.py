@@ -14,6 +14,12 @@ def readFile():
     fh.close()
 
 
+def checkKey(k, dict1):
+    for key in dict1:
+        if key == k:
+                return (key, dict1[key][0], dict1[key][1])
+
+
 def server():
     try:
         ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,8 +38,9 @@ def server():
     print("[S]: Server IP address is {}".format(localhost_ip))
     csockid, addr = ss.accept()
     print("[S]: Got a connection request from ls at {}".format(addr))
-    csockid.settimeout(10)
+    csockid.settimeout(20)
     while 1:
+
         hn = csockid.recv(1024)
         if hn == "timeout":
             time.sleep(2)

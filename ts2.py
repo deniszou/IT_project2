@@ -32,7 +32,7 @@ def server():
     print("[S]: Server IP address is {}".format(localhost_ip))
     csockid, addr = ss.accept()
     print("[S]: Got a connection request from ls at {}".format(addr))
-    csockid.settimeout(10)
+    csockid.settimeout(20)
     while 1:
 
         hn = csockid.recv(1024)
