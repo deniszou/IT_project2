@@ -5,6 +5,7 @@ import sys
 
 
 def ls():
+
     #create server socket to communicate with cs
     try:
         ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,31 +48,50 @@ def ls():
     ts2IP = socket.gethostbyname(ts2Hostname)
     ts2_binding = (ts2IP, ts2ListenPort)
     ts2.connect(ts2_binding)
-
-
+    ts1.settimeout(5)
+    ts2.settimeout(5)
     while 1:
+        time1 = False
+        time2 = False
         hn = csockid.recv(1024)
         print(hn.decode('utf-8'))
         ts1.send(hn)
         ts2.send(hn)
-        data_from_ts1 = ts1.recv(1024)
-        print(data_from_ts1)
-        ts1.settimeout(10)
-        data_from_ts2 = ts2.recv(1024)
-        print(data_from_ts2)
-        ts2.settimeout(10)
+
+        try:
+            data_from_ts1 = ts1.recv(1024)
+        except socket.timeout as timeout:
+            ts1.send("timeout".encode('utf-8'))
+            print("timeout1", timeout)
+            data_from_ts1 = "timeout".encode('utf-8')
+            time1 = True
+            pass
+
+        # except ts1.timeout as timeout1:
+        #     #print("ts1 timeout")
+        #     print(data_from_ts1 + '\n'.format(timeout1))
+
+        #try:
+        try:
+            data_from_ts2 = ts2.recv(1024)
+        except socket.timeout as timeout:
+            ts2.send("timeout".encode('utf-8'))
+            print("timeout2", timeout)
+            data_from_ts2 = "timeout".encode('utf-8')
+            time2 = True
+            pass
+
         dts1 = data_from_ts1.decode('utf-8')
         dts2 = data_from_ts2.decode('utf-8')
-        msg = ''
 
-
-        #replace this code with timeout
-        # if dts1 == "nf" and dts2 == "nf":
-        #     msg = "Hostname - Error:HOST NOT FOUND"
-        #     csockid.send(msg.encode('utf-8'))
-        # # print(hostname)
-        csockid.send(dts1.encode('utf-8'))
-        csockid.send(dts2.encode('utf-8'))
+        if dts1 != "timeout":
+            print(dts1)
+            csockid.send(dts1.encode('utf-8'))
+        if dts2 != "timeout":
+            print(dts2)
+            csockid.send(dts2.encode('utf-8'))
+        if time1 and time2:
+            csockid.send("Hostname - Error:HOST NOT FOUND".encode('utf-8'))
 
 
 

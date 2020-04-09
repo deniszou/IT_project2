@@ -58,10 +58,15 @@ def client():
         data_from_server = cs.recv(1024)
         d = data_from_server.decode('utf-8')
         print('works', d)
+
         #if d.endswith("A") or d.endswith("A\n"):
         time.sleep(1.5)
-        print("[C]: Data matched in RS table and received from server:", d)
-        f.write(d)
+        if d == "Hostname - Error:HOST NOT FOUND":
+            print("[C]: Error:HOST NOT FOUND", d)
+            f.write(line.strip("\n") + " - Error:HOST NOT FOUND\n")
+        else:
+            print("[C]: Data matched in RS table and received from server:", d)
+            f.write(d)
         """
         elif d.endswith("NS") or d.endswith("NS\n"):
             time.sleep(1.5)
@@ -84,7 +89,7 @@ def client():
                 print("[C]: Hostname - error: HOST NOT FOUND")
                 f.write(m)
     """
-    cs.send("end".encode('utf-8'))
+    #cs.send("end".encode('utf-8'))
     # if connectTS != 0:
     #     connectTS.send("end".encode('utf-8'))
     f.close()
