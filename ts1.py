@@ -13,13 +13,6 @@ def readFile():
         dict1[rec[0]] = (rec[0] + " " + rec[1] + " " + rec[2])
     fh.close()
 
-
-def checkKey(k, dict1):
-    for key in dict1:
-        if key == k:
-                return (key, dict1[key][0], dict1[key][1])
-
-
 def server():
     try:
         ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,28 +31,27 @@ def server():
     print("[S]: Server IP address is {}".format(localhost_ip))
     csockid, addr = ss.accept()
     print("[S]: Got a connection request from ls at {}".format(addr))
-    csockid.settimeout(20)
+    #csockid.settimeout(20)
     while 1:
 
         hn = csockid.recv(1024)
-        if hn == "timeout":
-            time.sleep(2)
         hostname = hn.decode('utf-8')
-        print(hostname)
+        #print(hostname)
         readFile()
 
         # Close the server socket
         if hostname == "end":
+            print(hostname)
             ss.close()
             exit()
 
         if dict1.get(hostname, "dne") != "dne":
             msg = dict1.get(hostname, "dne")
-            print("found")
+            #print("found")
             csockid.send(msg.encode('utf-8'))
-        else:
-            print("dne")
-            print(hostname)
+        #else:
+        #    print("dne")
+        #    print(hostname)
             #break
 
 
@@ -68,3 +60,5 @@ def server():
 dict1 = {}
 t1 = threading.Thread(name='tsServer', target=server)
 t1.start()
+time.sleep(5)
+exit()

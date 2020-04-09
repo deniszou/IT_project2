@@ -58,12 +58,15 @@ def ls():
         print(hn.decode('utf-8'))
         ts1.send(hn)
         ts2.send(hn)
+        if hn.decode('utf-8') == "end":
+            ss.close()
+            exit()
 
         try:
             data_from_ts1 = ts1.recv(1024)
         except socket.timeout as timeout:
             #ts1.send("timeout".encode('utf-8'))
-            print("timeout1", timeout)
+            #print("timeout1", timeout)
             data_from_ts1 = "timeout".encode('utf-8')
             time1 = True
             pass
@@ -77,7 +80,7 @@ def ls():
             data_from_ts2 = ts2.recv(1024)
         except socket.timeout as timeout:
             #ts2.send("timeout".encode('utf-8'))
-            print("timeout2", timeout)
+            #print("timeout2", timeout)
             data_from_ts2 = "timeout".encode('utf-8')
             time2 = True
             pass
@@ -92,8 +95,11 @@ def ls():
             print(dts2)
             csockid.send(dts2.encode('utf-8'))
         if time1 and time2:
+            print("dne")
             csockid.send("Hostname - Error:HOST NOT FOUND".encode('utf-8'))
-
+    ts1.close()
+    ts2.close()
+    exit()
 
 
 

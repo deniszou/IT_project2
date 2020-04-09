@@ -32,32 +32,31 @@ def server():
     print("[S]: Server IP address is {}".format(localhost_ip))
     csockid, addr = ss.accept()
     print("[S]: Got a connection request from ls at {}".format(addr))
-    csockid.settimeout(20)
+    #csockid.settimeout(20)
     while 1:
-
         hn = csockid.recv(1024)
-        if hn == "":
-            break
         hostname = hn.decode('utf-8')
-        print(hostname)
         readFile()
 
         # Close the server socket
         if hostname == "end":
+            print(hostname)
             ss.close()
             exit()
 
         if dict1.get(hostname, "dne") != "dne":
             msg = dict1.get(hostname, "dne")
-            print("found")
-            print(msg)
+            # print("found")
+            # print(msg)
             csockid.send(msg.encode('utf-8'))
-        else:
-            print("dne")
-            print(hostname)
+        #else:
+            # print("dne")
+            # print(hostname)
             #break
 
 
 dict1 = {}
 t2 = threading.Thread(name='tsServer', target=server)
 t2.start()
+time.sleep(5)
+exit()
